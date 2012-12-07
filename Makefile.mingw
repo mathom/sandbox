@@ -1,0 +1,28 @@
+BINARY=sandbox.exe
+SOURCE=$(wildcard *.cpp)
+OBJECTS=$(patsubst %.cpp,%.o,$(SOURCE))
+
+#CXXFLAGS=`fltk-config --cxxflags`
+#LDFLAGS=`fltk-config --use-gl --ldstaticflags` -lchipmunk_static
+
+CROSS_ROOT=./mingw
+#CROSS_CXX=/usr/bin/i586-mingw32msvc-g++
+#CROSS_WINDRES=/usr/bin/i586-mingw32msvc-windres
+CXX=g++
+WINDRES=windres
+CXXFLAGS=-I$(CROSS_ROOT)/include -Imingw/include -g
+LDFLAGS=-L$(CROSS_ROOT)/lib -Lmingw/lib -lfltk_gl -lopengl32 -lfltk -lchipmunk_static -lgdi32 -lcomctl32 -lwsock32 -lole32 -luuid -lmingw32 
+
+all: $(BINARY)
+
+$(BINARY): $(OBJECTS) sandbox-res.o
+	$(CXX) $(CXXFLAGS) -o $@ $^ $(LDFLAGS) 
+
+%.o: %.cpp
+	$(CXX) $(CXXFLAGS) -c -o $@ $^ 
+
+sandbox-res.o:
+	$(WINDRES) sandbox.rc sandbox-res.o
+
+clean:
+	rm $(OBJECTS) sandbox-res.o sandbox sandbox.exe

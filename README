@@ -1,0 +1,5 @@
+Here's a little physics toy I wrote sometime in 2007.
+
+* Command Line Switches
+	-geometry WxH+X+Y
+	Note: see the FLTK handbook for a complete list!
